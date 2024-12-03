@@ -12,11 +12,11 @@ from flask import Flask, render_template, request, jsonify
 # local imports
 import bedrock 
 
+# global variables
+messages=[]
+
 app = Flask(__name__)
 
-# Mock function for AI inference
-def ai_inference(text):
-    return f"AI response to: '{text}'"
 
 @app.route('/')
 def index():
@@ -25,8 +25,14 @@ def index():
 @app.route('/infer', methods=['POST'])
 def infer():
     input_text = request.form.get('input_text')
-    output_text = ai_inference(input_text)  # Here you would call your actual AI function
+    output_text = bedrock.generate_response(input_text)
+    #print(output_text)
     return jsonify({'output': output_text})
+
+@app.route('/reset', methods=['POST'])
+def reset():
+    bedrock.reset_conversation()
+    return jsonify({'success': True})
 
 if __name__ == '__main__':
     #app.run(debug=True, host='0.0.0.0')

@@ -7,31 +7,45 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #333; 
-            color: white; 
+            background-color: #333;
+            color: white;
+            margin: 0; 
         }
         #chat-log {
             height: 400px;
             width: 100%;
-            border: 1px solid #555; 
-            background-color: #444; 
+            border: 1px solid #555;
+            background-color: #444;
             color: white;
             overflow-y: scroll;
+            white-space: pre-wrap;
+            box-sizing: border-box; 
+            padding: 10px; 
+            margin: 0; 
         }
         #input-area {
             height: 100px;
             width: 100%;
             border: 1px solid #555;
-            background-color: #444; 
+            background-color: #444;
             color: white;
             overflow-y: scroll;
+            box-sizing: border-box; 
+            padding: 10px; 
+            margin: 0; 
+        }
+        button {
+            width: 10%; 
+            margin-top: 10px; 
         }
     </style>
 </head>
 <body>
+    <p>AI Chat powered by AWS Bedrock</p>
     <div id="chat-log"></div>
     <textarea id="input-area" placeholder="Type your message here..."></textarea>
     <button onclick="sendMessage()">Send</button>
+    <button onclick="resetConversation()">Reset</button>
 
     <script>
         function sendMessage() {
@@ -48,11 +62,24 @@
             .then(response => response.json())
             .then(data => {
                 chatLog.innerHTML += `<p><strong>User:</strong> ${input.value}</p>`;
-                chatLog.innerHTML += `<p><strong>AI:</strong> ${data.output}</p>`;
+                chatLog.innerHTML += `<p><strong>AI:</strong> ${data.output.replace(/\n/g, '<br>')}</p>`;
                 chatLog.scrollTop = chatLog.scrollHeight; // Auto scroll to bottom
                 input.value = ''; // Clear input
             });
         }
+
+        function resetConversation() {
+            const chatLog = document.getElementById('chat-log');
+            chatLog.innerHTML = ''; // Clear the chat log
+            fetch('/reset', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Conversation reset:", data.success); 
+            });
+        }
+
     </script>
 </body>
 </html>
