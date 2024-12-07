@@ -9,7 +9,7 @@ could be easily swapped in.
 
 ![screenshot](/screenshots/screenshot-12-3-2024.png "Flask App")
 
-###To use :
+### To use :
 - Setup the AWS CLI on your system
 - Associate the AWS CLI with a AWS API key for a user with permissions for AWS Bedrock
 - pip install the modules in the requirements.txt
